@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('_pessoa');
-            $table->string('_numero');
+            $table->string('_numero')->unique();
             $table->timestamps();
         });
     }

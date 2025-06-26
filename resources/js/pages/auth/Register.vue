@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,74 +8,64 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    Nome: '',
+    Endereço: '',
+    CPF: '',
+    Gênero: '',
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
-};
+    form.post('/register', {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Pessoa registrada!')
+        },
+    })
+}
+
 </script>
 
 <template>
-    <AuthBase title="Create an account" description="Enter your details below to create your account">
-        <Head title="Register" />
+    <AuthBase title="Registre a pessoa" description="Preencha as informações necessárias">
+        <Head title="Pessoa" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="name">Name</Label>
-                    <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="name" v-model="form.name" placeholder="Full name" />
-                    <InputError :message="form.errors.name" />
+                    <Label for="Nome">Nome</Label>
+                    <Input id="Nome" type="text" required autofocus :tabindex="1" v-model="form.Nome" placeholder="Nome completo" />
+                    <p v-if="form.errors.Nome" class="text-sm text-red-600">{{ form.errors.Nome }}</p>
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input id="email" type="email" required :tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
-                    <InputError :message="form.errors.email" />
+                    <Label for="Endereço">Endereço</Label>
+                    <Input id="Endereço" type="text" required :tabindex="2" v-model="form.Endereço" placeholder="Endereço" />
+                    <p v-if="form.errors.Endereço" class="text-sm text-red-600">{{ form.errors.Endereço }}</p>
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        required
-                        :tabindex="3"
-                        autocomplete="new-password"
-                        v-model="form.password"
-                        placeholder="Password"
-                    />
-                    <InputError :message="form.errors.password" />
+                    <Label for="CPF">CPF</Label>
+                    <Input id="CPF" type="text" required :tabindex="3" v-model="form.CPF" placeholder="CPF" />
+                    <p v-if="form.errors.CPF" class="text-sm text-red-600">{{ form.errors.CPF }}</p>
                 </div>
 
-                <div class="grid gap-2">
-                    <Label for="password_confirmation">Confirm password</Label>
-                    <Input
-                        id="password_confirmation"
-                        type="password"
-                        required
-                        :tabindex="4"
-                        autocomplete="new-password"
-                        v-model="form.password_confirmation"
-                        placeholder="Confirm password"
-                    />
-                    <InputError :message="form.errors.password_confirmation" />
+                <div>
+                    <Label for="Gênero">Gênero:</Label>
+                    <input type="radio" id="masc" name="Gênero" v-model="form.Gênero" value="Masculino">
+                    <label for="masc">Masculino</label><br>
+                    <input type="radio" id="fem" name="Gênero" v-model="form.Gênero" value="Feminino">
+                    <label for="fem">Feminino</label><br>
+                    <p v-if="form.errors.Gênero" class="text-sm text-red-600">{{ form.errors.Gênero }}</p>
                 </div>
 
                 <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    Create account
+                    Registrar
                 </Button>
             </div>
 
             <div class="text-center text-sm text-muted-foreground">
-                Already have an account?
-                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Log in</TextLink>
+                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Quer registrar um politico?</TextLink>
             </div>
         </form>
     </AuthBase>

@@ -1,92 +1,68 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
-defineProps<{
-    status?: string;
-    canResetPassword: boolean;
-}>();
-
 const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
+    Nome: '',
+    Apelido: '',
+    Partido: '',
+    Urna: '',
 });
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
-};
+    form.post('/register-politico', {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Politico registrado!')
+        },
+    })
+}
+
 </script>
 
 <template>
-    <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
+    <AuthBase title="Registre o politico" description="Preencha as informações necessárias">
+        <Head title="Politico" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="email"
-                        v-model="form.email"
-                        placeholder="email@example.com"
-                    />
-                    <InputError :message="form.errors.email" />
+                    <Label for="Nome">Nome do político</Label>
+                    <Input id="Nome" type="text" v-model="form.Nome" required placeholder="Nome completo" />
+                    <p v-if="form.errors.Nome" class="text-sm text-red-600">{{ form.errors.Nome }}</p>
                 </div>
 
                 <div class="grid gap-2">
-                    <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
-                        <TextLink v-if="canResetPassword" :href="route('password.request')" class="text-sm" :tabindex="5">
-                            Forgot password?
-                        </TextLink>
-                    </div>
-                    <Input
-                        id="password"
-                        type="password"
-                        required
-                        :tabindex="2"
-                        autocomplete="current-password"
-                        v-model="form.password"
-                        placeholder="Password"
-                    />
-                    <InputError :message="form.errors.password" />
+                    <Label for="Apelido">Apelido</Label>
+                    <Input id="Apelido" type="text" required autofocus :tabindex="2" v-model="form.Apelido" placeholder="Apelido completo" />
+                    <p v-if="form.errors.Apelido" class="text-sm text-red-600">{{ form.errors.Apelido }}</p>
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" v-model="form.remember" :tabindex="3" />
-                        <span>Remember me</span>
-                    </Label>
+                <div class="grid gap-2">
+                    <Label for="Partido">Nome do partido</Label>
+                    <Input id="Partido" type="text" required :tabindex="3" v-model="form.Partido" placeholder="Partido" />
+                    <p v-if="form.errors.Partido" class="text-sm text-red-600">{{ form.errors.Partido }}</p>
                 </div>
 
-                <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="form.processing">
+                <div class="grid gap-2">
+                    <Label for="Urna">Número do partido</Label>
+                    <Input id="Urna" type="text" required :tabindex="4" v-model="form.Urna" placeholder="Número da urna" />
+                    <p v-if="form.errors.Urna" class="text-sm text-red-600">{{ form.errors.Urna }}</p>
+                </div>
+
+                <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    Log in
+                    Registrar
                 </Button>
             </div>
 
             <div class="text-center text-sm text-muted-foreground">
-                Don't have an account?
-                <TextLink :href="route('register')" :tabindex="5">Sign up</TextLink>
+                <TextLink :href="route('register')" :tabindex="5">Não registrou a pessoa?</TextLink>
             </div>
         </form>
     </AuthBase>

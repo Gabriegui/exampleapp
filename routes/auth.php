@@ -8,7 +8,10 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Rules\UniqueInSchema;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -53,4 +56,52 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+});
+
+Route::post('/register', function (Request $request) {
+    $request->validate([
+        'Nome' => 'required|unique:_pessoa,Nome',
+        'Endereço' => 'required',
+        'CPF' => 'required|unique:_pessoa,CPF|max:20',
+        'Gênero' => 'required',
+    ]);
+
+    DB::table(DB::raw('"public"."_pessoa"'))->insert([
+        'Nome' => $request->Nome,
+        'Endereço' => $request->Endereço,
+        'CPF' => $request->CPF,
+        'Gênero' => $request->Gênero,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return back()->with('success', 'Pessoa registrada.');
+});
+
+Route::post('/register-politico', function (Request $request) {
+    $request->validate([
+        'Nome' => 'required',
+        'Partido' => 'required',
+        'Urna' => 'required',
+        'Apelido' => ['required', new UniqueInSchema('public', 'politicos', 'Nome_guerra')],
+    ]);
+
+    $pessoa = DB::table('_pessoa')->where('Nome', $request->Nome)->first();
+
+    if (!$pessoa) {
+        return back()->withErrors([
+            'Nome' => 'Pessoa não registrada. Vá até a tela de registro de pessoas.',
+        ])->withInput();
+    }
+
+    DB::table(DB::raw('"public"."politicos"'))->insert([
+        'user_id' => $pessoa->id,
+        'partido' => $request->Partido,
+        'numero_urna' => $request->Urna,
+        'Nome_guerra' => $request->Apelido,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return back()->with('success', 'Político registrado com sucesso.');
 });
