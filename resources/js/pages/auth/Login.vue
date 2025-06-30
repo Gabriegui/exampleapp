@@ -15,10 +15,10 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post('/register-politico', {
+    form.post('/login', {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Politico registrado!')
+            alert('Político registrado!')
         },
     })
 }
@@ -26,8 +26,8 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase title="Registre o politico" description="Preencha as informações necessárias">
-        <Head title="Politico" />
+    <AuthBase title="Registre o político" description="Pessoa precisa estar regstrada para o político ser validado.">
+        <Head title="Político" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
@@ -63,6 +63,10 @@ const submit = () => {
 
             <div class="text-center text-sm text-muted-foreground">
                 <TextLink :href="route('register')" :tabindex="5">Não registrou a pessoa?</TextLink>
+            </div>
+            
+            <div class="text-center text-sm text-muted-foreground">
+                <TextLink :href="route('/register-telefone')" :tabindex="5">Quer registrar telefone?</TextLink>
             </div>
         </form>
     </AuthBase>

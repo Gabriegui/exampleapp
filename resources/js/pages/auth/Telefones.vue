@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { LoaderCircle } from 'lucide-vue-next';
 
 const form = useForm({
     Nome: '',
@@ -24,8 +22,8 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase title="Registre o politico" description="Preencha as informações necessárias">
-        <Head title="Politico" />
+    <AuthBase title="Registre o Telefone" description="Pessoa precisa estar regstrada para o telefone ser validado.">
+        <Head title="Telefone" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
@@ -37,7 +35,7 @@ const submit = () => {
 
                 <div class="grid gap-2">
                     <Label for="Apelido">Telefone</Label>
-                    <Input id="Apelido" type="text" required autofocus :tabindex="2" v-model="form.Telefone" placeholder="Apelido completo" />
+                    <Input id="Apelido" type="text" required autofocus :tabindex="2" v-model="form.Telefone" placeholder="Número completo" />
                     <p v-if="form.errors.Telefone" class="text-sm text-red-600">{{ form.errors.Telefone }}</p>
                 </div>
             </div>
