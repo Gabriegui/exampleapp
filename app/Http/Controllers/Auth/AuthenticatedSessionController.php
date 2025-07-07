@@ -4,29 +4,24 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Politico;
-use App\Models\Pessoa;
 use App\Rules\UniqueInSchema;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AuthenticatedSessionController extends Controller
-{
+class AuthenticatedSessionController extends Controller{
     /**
      * Show the login page.
      */
-    public function create(): Response
-    {
+    public function create(): Response{
         return Inertia::render('auth/Login');
     }
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Request $request): RedirectResponse
-    {
+    public function store(Request $request): RedirectResponse{
         $request->validate([
             'Nome' => 'required',
             'Partido' => 'required',
@@ -34,16 +29,16 @@ class AuthenticatedSessionController extends Controller
             'Apelido' => ['required', new UniqueInSchema('public', 'politicos', 'Nome_guerra')],
         ]);
 
-        $pessoa = Pessoa::where('Nome', $request->Nome)->first();
+        $politico = politico::where('Nome', $request->Nome)->first();
 
-        if (!$pessoa) {
+        if (!$politico) {
             return back()->withErrors([
-                'Nome' => 'Pessoa não registrada. Vá até a tela de registro de pessoas.',
+                'Nome' => 'politico não registrada. Vá até a tela de registro de politicos.',
             ])->withInput();
         } 
 
         Politico::create([
-            'user_id' => $pessoa->id,
+            'user_id' => $politico->id,
             'partido' => $request->Partido,
             'numero_urna' => $request->Urna,
             'Nome_guerra' => $request->Apelido,
@@ -51,19 +46,43 @@ class AuthenticatedSessionController extends Controller
             'updated_at' => now(),
         ]);
 
-        return to_route('dashboard')->with('success', 'Politico registrado com sucesso.');
+        return to_route('lista-politicos')->with('success', 'Politico registrado com sucesso.');
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard('web')->logout();
+    public function show(){
+        $politicos = Politico::all();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        return Inertia::render('Lista-politicos', [
+            'politicos' => $politicos,
+        ]);
+    }
+    
+    public function edit($id){
+        $politico = Politico::findOrFail($id);
+        return Inertia::render('Edit-politico', [
+            'politico' => $politico,
+        ]);
+    }
 
-        return redirect('/');
+    public function update(Request $request, $id){
+
+        $politico = Politico::findOrFail($id);
+
+        $validated = $request->validate([
+            'Nome_guerra' => 'required',
+            'numero_urna' => 'required',
+            'partido' => 'required'
+        ]);
+
+        
+        $politico->update($validated);
+        
+        return to_route('lista-politicos')->with('success', 'Politico editado com sucesso.');
+    }
+
+    public function destroy($id){
+        $politico = Politico::findOrFail($id);
+        $politico->delete();
+        return to_route('lista-politicos')->with('success', 'Politico deletado com sucesso.');
     }
 }

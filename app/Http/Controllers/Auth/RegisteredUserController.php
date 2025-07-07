@@ -9,13 +9,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class RegisteredUserController extends Controller
-{
+class RegisteredUserController extends Controller{
     /**
      * Show the registration page.
      */
-    public function create(): Response
-    {
+    public function create(): Response{
         return Inertia::render('auth/Register');
     }
 
@@ -24,8 +22,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
+    public function store(Request $request): RedirectResponse{
         $request->validate([
             'Nome' => 'required|unique:_pessoa,Nome',
             'Endereço' => 'required',
@@ -43,5 +40,42 @@ class RegisteredUserController extends Controller
         ]);
 
         return to_route('dashboard')->with('success', 'Pessoa registrada com sucesso.');
+    }
+
+    public function show(){
+        $pessoas = Pessoa::all();
+
+        return Inertia::render('Dashboard', [
+            'pessoas' => $pessoas,
+        ]);
+    }
+
+    public function edit($id){
+        $pessoa = Pessoa::findOrFail($id);
+        return Inertia::render('Edit-pessoa', [
+            'pessoa' => $pessoa,
+        ]);
+    }
+
+    public function update(Request $request, $id){
+
+        $pessoa = Pessoa::findOrFail($id);
+
+        $validated = $request->validate([
+            'Nome' => 'required|unique:_pessoa,Nome,' . $pessoa->id,
+            'Endereço' => 'required',
+            'CPF' => 'required|unique:_pessoa,CPF,' . $pessoa->id,
+            'Gênero' => 'required'
+        ]);
+
+        $pessoa->update($validated);
+        
+        return to_route('dashboard')->with('success', 'Pessoa editada com sucesso.');
+    }
+
+    public function destroy($id){
+        $pessoa = Pessoa::findOrFail($id);
+        $pessoa->delete();
+        return to_route('dashboard')->with('success', 'Pessoa deletada com sucesso.');
     }
 }

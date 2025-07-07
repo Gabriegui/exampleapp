@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import TextLink from '@/components/TextLink.vue';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
 
 const form = useForm({
     Nome: '',
@@ -11,7 +13,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post('/register-telefone', {
+    form.post('register-telefone', {
         preserveScroll: true,
         onSuccess: () => {
             alert('Número registrado!')
@@ -39,6 +41,11 @@ const submit = () => {
                     <p v-if="form.errors.Telefone" class="text-sm text-red-600">{{ form.errors.Telefone }}</p>
                 </div>
             </div>
+
+            <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
+                <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                Registrar
+            </Button>
 
             <div class="text-center text-sm text-muted-foreground">
                 <TextLink :href="route('register')" :tabindex="5">Não registrou a pessoa?</TextLink>

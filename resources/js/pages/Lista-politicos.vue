@@ -1,48 +1,47 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 
-type Pessoa = {
-    id: number;
-    Nome: string;
-    Endereço: string;
-    CPF: string;
-    Gênero: string;
+type Político = {
+    user_id: number;
+    Nome_guerra: string;
+    numero_urna: string;
+    partido: string;
     created_at: string;
 }
 
 defineProps<{
-    pessoas: Pessoa[]
+    politicos: Político[]
 }>();
 
-const deletePessoa = (id: number) => {
-    if (confirm('Você tem certeza que deseja deletar esta pessoa?')) {
-        router.delete(route('delete-pessoa', id));
+const deletePolitico = (id: number) => {
+    if (confirm('Você tem certeza que deseja deletar este político?')) {
+        router.delete(route('delete-politico', id));
     }
 }
 
 </script>
 
 <template>
-    <Head title="Lista de pessoas" />
+    <Head title="Lista de Políticos" />
         
     <div>
         <div class="flex justify-center items-center gap-6 mb-8 mt-4">
-            <h1 class="text-2xl font-bold mb-0">Lista de Pessoas</h1>
+            <h1 class="text-2xl font-bold mb-0">Lista de Políticos</h1>
             <Link
-                :href="route('register')"
+                :href="route('login')"
                 class="inline-block rounded-sm border border-[#19140035] 
                 px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                 dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
             >
-                Registrar pessoa
+                Registrar político
             </Link>
             <Link
-                :href="route('lista-politicos')"
+                :href="route('dashboard')"
                 class="inline-block rounded-sm border border-[#19140035] 
                 px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                 dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
             >
-                Lista de Políticos
+                Lista de pessoas
             </Link>
             <Link
                 :href="route('lista-telefone')"
@@ -58,28 +57,26 @@ const deletePessoa = (id: number) => {
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="px-4 py-2 border">ID</th>
-                        <th class="px-4 py-2 border">Nome</th>
-                        <th class="px-4 py-2 border">Endereço</th>
-                        <th class="px-4 py-2 border">CPF</th>
-                        <th class="px-4 py-2 border">Gênero</th>
+                        <th class="px-4 py-2 border">Apelido</th>
+                        <th class="px-4 py-2 border">Partido</th>
+                        <th class="px-4 py-2 border">Número</th>
                         <th class="px-4 py-2 border">Criado em</th>
                         <th class="px-4 py-2 border">Editar/Deletar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="pessoa in pessoas" :key="pessoa.id">
-                        <td class="px-4 py-2 border">{{ pessoa.id }}</td>
-                        <td class="px-4 py-2 border">{{ pessoa.Nome }}</td>
-                        <td class="px-4 py-2 border">{{ pessoa.Endereço }}</td>
-                        <td class="px-4 py-2 border">{{ pessoa.CPF }}</td>
-                        <td class="px-4 py-2 border">{{ pessoa.Gênero }}</td>
+                    <tr v-for="politico in politicos" :key="politico.user_id">
+                        <td class="px-4 py-2 border">{{ politico.user_id }}</td>
+                        <td class="px-4 py-2 border">{{ politico.Nome_guerra }}</td>
+                        <td class="px-4 py-2 border">{{ politico.partido }}</td>
+                        <td class="px-4 py-2 border">{{ politico.numero_urna }}</td>
                         <td class="px-4 py-2 border">
-                            {{ new Date(pessoa.created_at).toLocaleString('pt-BR', { 
+                            {{ new Date(politico.created_at).toLocaleString('pt-BR', { 
                                 day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
                             }) }}
                         </td>
                         <Link
-                            :href="route('edit-pessoa', pessoa.id)"
+                            :href="route('edit-politico', politico.user_id)"
                             class="inline-block rounded-sm border border-[#19140035] 
                             px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                             dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
@@ -87,14 +84,13 @@ const deletePessoa = (id: number) => {
                             Edit
                         </Link>
                         <Button
-                            @click="deletePessoa(pessoa.id)"
+                            @click="deletePolitico(politico.user_id)"
                             class="inline-block rounded-sm border border-[#19140035] 
                             px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                             dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             >
                             Delete
                         </Button>
-                        
                     </tr>
                 </tbody>
             </table>
