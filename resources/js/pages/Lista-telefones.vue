@@ -40,7 +40,7 @@ const deleteTelefone = (id: number) => {
                 px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                 dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
             >
-                Lista de Telefones
+                Lista de Pessoas
             </Link>
             <Link
                 :href="route('lista-politicos')"
