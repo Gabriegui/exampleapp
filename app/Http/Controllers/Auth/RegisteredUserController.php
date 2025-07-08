@@ -10,18 +10,11 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 class RegisteredUserController extends Controller{
-    /**
-     * Show the registration page.
-     */
+    
     public function create(): Response{
         return Inertia::render('auth/Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse{
         $request->validate([
             'Nome' => 'required|unique:_pessoa,Nome',

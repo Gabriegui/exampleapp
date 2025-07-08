@@ -10,7 +10,8 @@ const props = defineProps(["politico"]);
 const form = useForm({
     Nome_guerra: props.politico.Nome_guerra,
     partido: props.politico.partido,
-    numero_urna: props.politico.numero_urna
+    numero_urna: props.politico.numero_urna,
+    ano_eleicao: props.politico.ano_eleicao
 });
 
 </script>
@@ -19,7 +20,7 @@ const form = useForm({
     <AuthBase title="Edite o politico" description="Preencha as informações necessárias">
         <Head title="Edit politico" />
 
-        <form @submit.prevent="form.put(route('update-politico', {id: politico.user_id}))" class="flex flex-col gap-6">
+        <form @submit.prevent="form.put(route('update-politico', {id: politico.id}))" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
                     <Label for="Nome_guerra">Nome</Label>
@@ -37,6 +38,12 @@ const form = useForm({
                     <Label for="numero_urna">Urna</Label>
                     <Input id="numero_urna" type="text" required :tabindex="3" v-model="form.numero_urna" placeholder="Urna" />
                     <p v-if="form.errors.numero_urna" class="text-sm text-red-600">{{ form.errors.numero_urna }}</p>
+                </div>
+
+                <div class="grid gap-2">
+                    <Label for="ano_eleicao">Ano de eleição</Label>
+                    <Input id="ano_eleicao" type="text" required :tabindex="4" v-model="form.ano_eleicao" placeholder="Ano" />
+                    <p v-if="form.errors.ano_eleicao" class="text-sm text-red-600">{{ form.errors.ano_eleicao }}</p>
                 </div>
 
                 <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">

@@ -69,7 +69,7 @@ const submit = () => {
             </div>
             
             <div class="text-center text-sm text-muted-foreground">
-                <TextLink :href="route('/register-telefone')" :tabindex="5">Quer registrar telefone?</TextLink>
+                <TextLink :href="route('register-telefone')" :tabindex="5">Quer registrar telefone?</TextLink>
             </div>
         </form>
     </AuthBase>

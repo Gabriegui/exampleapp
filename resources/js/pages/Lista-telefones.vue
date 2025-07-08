@@ -50,12 +50,21 @@ const deleteTelefone = (id: number) => {
             >
                 Lista de Políticos
             </Link>
+            <Link
+                :href="route('home')"
+                class="inline-block rounded-sm border border-[#19140035] 
+                px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
+                dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+            >
+                Voltar para Menu
+            </Link>
         </div>
         <div class ="flex justify-center">
             <table class="table-auto border-gray-300">
                 <thead>
-                    <tr class="bg-gray-100">
+                    <tr>
                         <th class="px-4 py-2 border">ID</th>
+                        <th class="px-4 py-2 border">Usuário</th>
                         <th class="px-4 py-2 border">Número</th>
                         <th class="px-4 py-2 border">Criado em</th>
                         <th class="px-4 py-2 border">Editar/Deletar</th>
@@ -64,6 +73,7 @@ const deleteTelefone = (id: number) => {
                 <tbody>
                     <tr v-for="telefone in telefones" :key="telefone.id">
                         <td class="px-4 py-2 border">{{ telefone.id }}</td>
+                        <td class="px-4 py-2 border">{{ telefone.user_id }}</td>
                         <td class="px-4 py-2 border">{{ telefone._numero }}</td>
                         
                         <td class="px-4 py-2 border">
@@ -72,7 +82,7 @@ const deleteTelefone = (id: number) => {
                             }) }}
                         </td>
                         <Link
-                            :href="route('edit-telefone', telefone.user_id)"
+                            :href="route('edit-telefone', telefone.id)"
                             class="inline-block rounded-sm border border-[#19140035] 
                             px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                             dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"

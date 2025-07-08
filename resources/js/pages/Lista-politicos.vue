@@ -2,10 +2,12 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 
 type Político = {
+    id: number;
     user_id: number;
     Nome_guerra: string;
     numero_urna: string;
     partido: string;
+    ano_eleicao: number;
     created_at: string;
 }
 
@@ -51,32 +53,44 @@ const deletePolitico = (id: number) => {
             >
                 Lista de Telefones
             </Link>
+            <Link
+                :href="route('home')"
+                class="inline-block rounded-sm border border-[#19140035] 
+                px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
+                dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+            >
+                Voltar para Menu
+            </Link>
         </div>
         <div class ="flex justify-center">
             <table class="table-auto border-gray-300">
                 <thead>
-                    <tr class="bg-gray-100">
+                    <tr>
                         <th class="px-4 py-2 border">ID</th>
+                        <th class="px-4 py-2 border">Usuário</th>
                         <th class="px-4 py-2 border">Apelido</th>
                         <th class="px-4 py-2 border">Partido</th>
                         <th class="px-4 py-2 border">Número</th>
+                        <th class="px-4 py-2 border">Ano de Eleição</th>
                         <th class="px-4 py-2 border">Criado em</th>
                         <th class="px-4 py-2 border">Editar/Deletar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="politico in politicos" :key="politico.user_id">
+                    <tr v-for="politico in politicos" :key="politico.id">
+                        <td class="px-4 py-2 border">{{ politico.id }}</td>
                         <td class="px-4 py-2 border">{{ politico.user_id }}</td>
                         <td class="px-4 py-2 border">{{ politico.Nome_guerra }}</td>
                         <td class="px-4 py-2 border">{{ politico.partido }}</td>
                         <td class="px-4 py-2 border">{{ politico.numero_urna }}</td>
+                        <td class="px-4 py-2 border">{{ politico.ano_eleicao }}</td>
                         <td class="px-4 py-2 border">
                             {{ new Date(politico.created_at).toLocaleString('pt-BR', { 
                                 day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
                             }) }}
                         </td>
                         <Link
-                            :href="route('edit-politico', politico.user_id)"
+                            :href="route('edit-politico', politico.id)"
                             class="inline-block rounded-sm border border-[#19140035] 
                             px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                             dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
@@ -84,7 +98,7 @@ const deletePolitico = (id: number) => {
                             Edit
                         </Link>
                         <Button
-                            @click="deletePolitico(politico.user_id)"
+                            @click="deletePolitico(politico.id)"
                             class="inline-block rounded-sm border border-[#19140035] 
                             px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] 
                             dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"

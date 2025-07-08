@@ -71,7 +71,6 @@ class TelefoneController extends Controller{
 
     public function destroy($id){
         $telefone = Telefone::findOrFail($id);
-        dd($telefone);
         $telefone->delete();
         return to_route('lista-telefone')->with('success', 'Telefone deletado com sucesso.');
     }

@@ -12,6 +12,7 @@ const form = useForm({
     Apelido: '',
     Partido: '',
     Urna: '',
+    Eleicao: '',
 });
 
 const submit = () => {
@@ -55,6 +56,12 @@ const submit = () => {
                     <p v-if="form.errors.Urna" class="text-sm text-red-600">{{ form.errors.Urna }}</p>
                 </div>
 
+                <div class="grid gap-2">
+                    <Label for="Eleicao">Ano de eleição</Label>
+                    <Input id="Eleicao" type="text" required :tabindex="5" v-model="form.Eleicao" placeholder="Ano" />
+                    <p v-if="form.errors.Eleicao" class="text-sm text-red-600">{{ form.errors.Eleicao }}</p>
+                </div>
+
                 <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Registrar
@@ -66,7 +73,7 @@ const submit = () => {
             </div>
             
             <div class="text-center text-sm text-muted-foreground">
-                <TextLink :href="route('/register-telefone')" :tabindex="5">Quer registrar telefone?</TextLink>
+                <TextLink :href="route('register-telefone')" :tabindex="5">Quer registrar telefone?</TextLink>
             </div>
         </form>
     </AuthBase>
