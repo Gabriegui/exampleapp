@@ -97,7 +97,6 @@ const deleteTelefone = (id: number) => {
                             >
                             Delete
                         </Button>
-                        
                     </tr>
                 </tbody>
             </table>

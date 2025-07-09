@@ -102,7 +102,6 @@ const deletePessoa = (id: number) => {
                             >
                             Delete
                         </Button>
-                        
                     </tr>
                 </tbody>
             </table>
